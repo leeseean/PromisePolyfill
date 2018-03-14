@@ -46,17 +46,17 @@ const PromisePolyfill = (() => {
     }
     return myPromise;
 })();
-//测试，下面会先打印出111，再打印出222，333
+//测试，下面会先打印出111aaa，再打印出222bbb，333ccc
 new PromisePolyfill(function (resolve, reject) {
     setTimeout(() => {
         resolve(222);
-        console.log(111)
+        console.log(`111aaa`)
     }, 1000);
 }).then(function (res, resolve, reject) {
     setTimeout(() => {
         resolve(333);
-        console.log(res)
+        console.log(`${res}bbb`)
     }, 3000);
 }).then(function (res, resolve, reject) {
-    console.log(res);
+    console.log(`${res}ccc`);
 });
