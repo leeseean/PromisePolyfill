@@ -44,6 +44,38 @@ const PromisePolyfill = (() => {
             return this;
         }
     }
+    myPromise.all = (iterable) => {
+        return new myPromise((resolve, reject) => {
+            let count = 0,
+                ans = new Array(count);
+            for (const i in iterable) {
+                const v = iterable[i];
+                if (typeof v === 'object' && typeof v.then === 'function') {
+                    v.then((res) => {
+                        ans[i] = res;
+                        if (--count === 0) {
+                            resolve(ans);
+                        }
+                    }, reject);
+                    count++;
+                } else {
+                    ans[i] = v;
+                }
+            }
+        });
+    };
+    myPromise.race = (iterable) => {
+        return new myPromise((resolve, reject) => {
+            for (const i in iterable) {
+                const v = iterable[i];
+                if (typeof v === 'object' && typeof v.then === 'function') {
+                    v.then(resolve, reject);
+                } else {
+                    resolve(v);
+                }
+            }
+        });
+    };
     return myPromise;
 })();
 //测试，下面会先打印出111aaa，再打印出222bbb，333ccc
